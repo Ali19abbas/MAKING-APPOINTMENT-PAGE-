@@ -1,4 +1,29 @@
-let fo =document.getElementById("form")
+window.addEventListener("DOMContentLoaded" ,()=>{
+    axios.get("https://crudcrud.com/api/977bc6b1d240421385a3741b49d43fed/userData")
+    .then((response)=>{
+        console.log(response)
+        for(let i=0;i<response.data.length;i++){
+            let d=response.data[i]
+            let NAME=d["n"];
+            let Email=d["e"];
+            let PHONE=d["p"];
+            var n =document.createElement("li")
+            n.appendChild(document.createTextNode(NAME))
+            n.appendChild(document.createTextNode("----"))
+            n.appendChild(document.createTextNode(PHONE))
+            n.appendChild(document.createTextNode("----"))
+            n.appendChild(document.createTextNode(Email))
+            let u=document.getElementById("list")
+            u.appendChild(n)
+            let btn=document.createElement("button");
+            btn.id="delete";
+            btn.innerHTML="DELETE"
+            n.appendChild(btn)
+            
+        }
+    })
+  })
+  let fo =document.getElementById("form")
 fo.addEventListener('submit',function(event){
 event.preventDefault();
 let name=document.getElementById("name").value;
@@ -38,6 +63,7 @@ var n =document.createElement("li")
             n.remove();
            localStorage.removeItem(name, userDetails);
           })
+          
   
           /*Editing
           ed.addEventListener("click" , function(e){
@@ -71,6 +97,7 @@ var n =document.createElement("li")
           })
           })*/
         })
+        
   
 
 
