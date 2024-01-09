@@ -1,25 +1,11 @@
 window.addEventListener("DOMContentLoaded" ,()=>{
-    axios.get("https://crudcrud.com/api/977bc6b1d240421385a3741b49d43fed/userData")
+    axios.get("https://crudcrud.com/api/36141b82b5ee43c6881c476568b4db28/userData")
     .then((response)=>{
         console.log(response)
+        let c=0;
+        let xyz=0;
         for(let i=0;i<response.data.length;i++){
-            let d=response.data[i]
-            let NAME=d["n"];
-            let Email=d["e"];
-            let PHONE=d["p"];
-            var n =document.createElement("li")
-            n.appendChild(document.createTextNode(NAME))
-            n.appendChild(document.createTextNode("----"))
-            n.appendChild(document.createTextNode(PHONE))
-            n.appendChild(document.createTextNode("----"))
-            n.appendChild(document.createTextNode(Email))
-            let u=document.getElementById("list")
-            u.appendChild(n)
-            let btn=document.createElement("button");
-            btn.id="delete";
-            btn.innerHTML="DELETE"
-            n.appendChild(btn)
-            
+            showUserData(response.data[i])   
         }
     })
   })
@@ -34,69 +20,44 @@ let myobj={
     p:phone,
     e:email
 }
-let userDetails=JSON.stringify(myobj);
-axios.post("https://crudcrud.com/api/977bc6b1d240421385a3741b49d43fed/userData",myobj).then((response)=>{
-    console.log(response)
+let currData
+
+axios.post("https://crudcrud.com/api/36141b82b5ee43c6881c476568b4db28/userData",myobj).then((response)=>{
+    axios.get("https://crudcrud.com/api/36141b82b5ee43c6881c476568b4db28/userData")
+.then((response)=>{
+     currData=response.data[response.data.length-1]["_id"]
+     myobj._id=currData
+})
 }).catch((error)=>{
     console.log("something went wrong")
 })
-localStorage.setItem(name,userDetails)
-var n =document.createElement("li")
-        n.appendChild(document.createTextNode(name))
-        n.appendChild(document.createTextNode("----"))
-        n.appendChild(document.createTextNode(phone))
-        n.appendChild(document.createTextNode("----"))
-        n.appendChild(document.createTextNode(email))
-        let u=document.getElementById("list")
-        u.appendChild(n)
-        let btn=document.createElement("button");
-        btn.id="delete";
-        btn.innerHTML="DELETE"
-        n.appendChild(btn)
-        // making edit button
-        //let ed=document.createElement("button");
-        //ed.id="Edit";
-        //ed.innerHTML="EDIT"
-        //n.appendChild(ed)
-        //deleleing element
-        btn.addEventListener("click", function(e){
-            n.remove();
-           localStorage.removeItem(name, userDetails);
-          })
-          
-  
-          /*Editing
-          ed.addEventListener("click" , function(e){
-            let ne=document.createElement("li")
-  
-            let a=document.getElementById("name").value
-            let d=document.getElementById('phone').value
-            let s=document.getElementById('mail').value
-            ne.appendChild(document.createTextNode(a))
-            ne.appendChild(document.createTextNode("----"))
-            ne.appendChild(document.createTextNode(d))
-            ne.appendChild(document.createTextNode("----"))
-            ne.appendChild(document.createTextNode(s))
-            ne.appendChild(btn)
-            ne.appendChild(ed)
-  
-            let r=u.lastElementChild;
-            console.log(r)
-            u.replaceChild(ne ,r)
-            btn.addEventListener("click", function(e){
-            ne.remove();
-            localStorage.removeItem(name, userDetails);
-            localStorage.removeItem;
-            let j={
-            name: a,
-            phone   : d,
-            email   : s
-          };
-          let j1=JSON.stringify(j);
-          localStorage.setItem(name,j1)
-          })
-          })*/
+showUserData(myobj)
+        
         })
+        function showUserData(obj){
+            
+            var n =document.createElement("li")
+            
+            n.appendChild(document.createTextNode(obj["n"]))
+            n.appendChild(document.createTextNode("----"))
+            n.appendChild(document.createTextNode(obj["p"]))
+            n.appendChild(document.createTextNode("----"))
+            n.appendChild(document.createTextNode(obj["e"]))
+            let u=document.getElementById("list")
+            u.appendChild(n)
+            let btn=document.createElement("button");
+            btn.id="delete";
+            btn.innerHTML="DELETE"
+            n.appendChild(btn)
+            btn.addEventListener("click", function(e){
+                n.remove();
+                let idd=(obj["_id"])
+                axios.delete(`https://crudcrud.com/api/36141b82b5ee43c6881c476568b4db28/userData/${idd}`).then(()=>{
+                    })
+                    })
+            
+        }
+       
         
   
 
